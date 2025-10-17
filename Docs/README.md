@@ -102,10 +102,6 @@ EconomicWPF/
 │   ├── DomainModel.mermaid
 │   └── DatabaseDiagram.mermaid
 │
-├── 📂 Styles/                  # XAML styles
-│   ├── Colors.xaml
-│   ├── Buttons.xaml
-│   └── MainStyles.xaml
 │
 ├── appsettings.json            # Konfiguration
 └── App.xaml                    # Application entry
@@ -191,7 +187,7 @@ Komplet dokumentation findes i `Docs/` mappen:
 
 ## 🤝 Bidrag
 
-Bidrag er velkomne! Se [CONTRIBUTING.md](CONTRIBUTING.md) for retningslinjer.
+Bidrag er velkomne! 
 
 ## 📄 Licens
 
@@ -199,7 +195,7 @@ Dette projekt er licenseret under MIT License - se [LICENSE](LICENSE) filen for 
 
 ## 👨‍💻 Forfatter
 
-Dit Navn - [@ditbrugernavn](https://github.com/ditbrugernavn)
+Dit Navn - [@codemikemike](https://github.com/codemikemike)
 
 ## 🙏 Anerkendelser
 
