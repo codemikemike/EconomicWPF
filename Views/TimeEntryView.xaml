@@ -1,0 +1,534 @@
+﻿<UserControl
+    x:Class="EconomicWPF.Views.TimeEntryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="700"
+    d:DesignWidth="1200"
+    Background="White"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!--  Moderne Style Definitions  -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="20,10" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1976D2" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#BDBDBD" />
+                                <Setter Property="Foreground" Value="#757575" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style
+            x:Key="SecondaryButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#757575" />
+        </Style>
+
+        <Style
+            x:Key="DangerButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#F44336" />
+        </Style>
+
+        <Style
+            x:Key="SuccessButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50" />
+        </Style>
+
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="BorderBrush" Value="#BDBDBD" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="BorderBrush" Value="#BDBDBD" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+
+        <Style x:Key="ModernDatePicker" TargetType="DatePicker">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="BorderBrush" Value="#BDBDBD" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+
+        <Style x:Key="HeaderText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#212121" />
+            <Setter Property="Margin" Value="0,0,0,20" />
+        </Style>
+
+        <Style x:Key="LabelText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#424242" />
+            <Setter Property="Margin" Value="0,5,0,3" />
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="SelectionMode" Value="Single" />
+            <Setter Property="AlternatingRowBackground" Value="#F5F5F5" />
+            <Setter Property="RowHeight" Value="35" />
+            <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="GridLinesVisibility" Value="None" />
+            <Setter Property="BorderBrush" Value="#E0E0E0" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#2196F3" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="BorderThickness" Value="0,0,1,0" />
+            <Setter Property="BorderBrush" Value="#1976D2" />
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Cursor" Value="Hand" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#BBDEFB" />
+                    <Setter Property="Foreground" Value="#212121" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E3F2FD" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Column="0"
+                Style="{StaticResource HeaderText}"
+                Text="Tidsregistrering" />
+
+            <StackPanel
+                Grid.Column="1"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <Border
+                    Margin="5"
+                    Padding="15,8"
+                    Background="#E3F2FD"
+                    CornerRadius="4">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="11"
+                            Foreground="#616161"
+                            Text="Total timer" />
+                        <TextBlock
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Foreground="#2196F3"
+                            Text="{Binding TotalHours, StringFormat='{}{0:N2} t'}" />
+                    </StackPanel>
+                </Border>
+                <Border
+                    Margin="5"
+                    Padding="15,8"
+                    Background="#E8F5E9"
+                    CornerRadius="4">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="11"
+                            Foreground="#616161"
+                            Text="Fakturerbare" />
+                        <TextBlock
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Foreground="#4CAF50"
+                            Text="{Binding TotalBillableHours, StringFormat='{}{0:N2} t'}" />
+                    </StackPanel>
+                </Border>
+                <Border
+                    Margin="5"
+                    Padding="15,8"
+                    Background="#FFF3E0"
+                    CornerRadius="4">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="11"
+                            Foreground="#616161"
+                            Text="Omsætning" />
+                        <TextBlock
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Foreground="#FF9800"
+                            Text="{Binding TotalRevenue, StringFormat=C}" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+
+        <!--  Filter Bar  -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <DatePicker
+                Grid.Column="0"
+                Width="130"
+                SelectedDate="{Binding DateFrom}"
+                Style="{StaticResource ModernDatePicker}" />
+
+            <TextBlock
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="16"
+                Foreground="#757575"
+                Text="→" />
+
+            <DatePicker
+                Grid.Column="2"
+                Width="130"
+                SelectedDate="{Binding DateTo}"
+                Style="{StaticResource ModernDatePicker}" />
+
+            <StackPanel
+                Grid.Column="4"
+                Margin="10,0"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <CheckBox
+                    Margin="0,0,15,0"
+                    Content="Kun fakturerbare"
+                    FontSize="14"
+                    IsChecked="{Binding ShowBillableOnly}" />
+                <CheckBox
+                    Content="Kun ufakturerede"
+                    FontSize="14"
+                    IsChecked="{Binding ShowUnbilledOnly}" />
+            </StackPanel>
+
+            <Button
+                Grid.Column="5"
+                Command="{Binding ViewTimesheetCommand}"
+                Content="📅 Denne uge"
+                Style="{StaticResource SecondaryButton}" />
+
+            <Button
+                Grid.Column="6"
+                Command="{Binding NewTimeEntryCommand}"
+                Content="➕ Registrer tid"
+                Style="{StaticResource SuccessButton}" />
+        </Grid>
+
+        <!--  Main Content Area  -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--  Time Entries List  -->
+            <Border
+                Grid.Column="0"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="4">
+                <DataGrid ItemsSource="{Binding TimeEntries}" SelectedItem="{Binding SelectedTimeEntry, Mode=TwoWay}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="100"
+                            Binding="{Binding Date, StringFormat=dd-MM-yyyy}"
+                            Header="Dato" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Project.Name}"
+                            Header="Projekt" />
+                        <DataGridTextColumn
+                            Width="200"
+                            Binding="{Binding Description}"
+                            Header="Beskrivelse" />
+                        <DataGridTextColumn
+                            Width="80"
+                            Binding="{Binding Hours, StringFormat=N2}"
+                            Header="Timer">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Right" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="90"
+                            Binding="{Binding HourlyRate, StringFormat=C}"
+                            Header="Timesats">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Right" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridCheckBoxColumn
+                            Width="60"
+                            Binding="{Binding IsBillable}"
+                            Header="Fakt." />
+                        <DataGridCheckBoxColumn
+                            Width="80"
+                            Binding="{Binding IsInvoiced}"
+                            Header="Faktureret" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!--  Edit Panel  -->
+            <Border
+                Grid.Column="2"
+                Padding="20"
+                Background="#FAFAFA"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="4"
+                Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock
+                            Margin="0,0,0,20"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="Tidsregistrering" />
+
+                        <!--  Tidsoplysninger  -->
+                        <TextBlock
+                            Margin="0,0,0,10"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#757575"
+                            Text="TIDSOPLYSNINGER" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Dato *" />
+                        <DatePicker SelectedDate="{Binding CurrentTimeEntry.Date}" Style="{StaticResource ModernDatePicker}" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Projekt *" />
+                        <ComboBox
+                            DisplayMemberPath="Name"
+                            ItemsSource="{Binding Projects}"
+                            SelectedItem="{Binding SelectedProject}"
+                            Style="{StaticResource ModernComboBox}" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Timer *" />
+                        <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding CurrentTimeEntry.Hours, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Beskrivelse *" />
+                        <TextBox
+                            Height="80"
+                            AcceptsReturn="True"
+                            Style="{StaticResource ModernTextBox}"
+                            Text="{Binding CurrentTimeEntry.Description, UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="Wrap"
+                            VerticalScrollBarVisibility="Auto" />
+
+                        <!--  Fakturering  -->
+                        <TextBlock
+                            Margin="0,15,0,10"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#757575"
+                            Text="FAKTURERINGSOPLYSNINGER" />
+
+                        <CheckBox
+                            Margin="0,5"
+                            Content="Fakturerbar tid"
+                            FontSize="14"
+                            IsChecked="{Binding CurrentTimeEntry.IsBillable}" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Timesats" />
+                        <TextBox
+                            IsEnabled="{Binding CurrentTimeEntry.IsBillable}"
+                            Style="{StaticResource ModernTextBox}"
+                            Text="{Binding CurrentTimeEntry.HourlyRate, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
+
+                        <!--  Total beløb  -->
+                        <Border
+                            Margin="0,15,0,0"
+                            Padding="15"
+                            Background="#E3F2FD"
+                            CornerRadius="4"
+                            Visibility="{Binding CurrentTimeEntry.IsBillable, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Grid>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    FontWeight="SemiBold"
+                                    Text="Total værdi:" />
+                                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center">
+                                    <Run Text="{Binding CurrentTimeEntry.Hours, StringFormat=N2, Mode=OneWay}" />
+                                    <Run Text=" × " />
+                                    <Run Text="{Binding CurrentTimeEntry.HourlyRate, StringFormat=C, Mode=OneWay}" />
+                                    <Run Text=" = " />
+                                    <Run
+                                        FontSize="16"
+                                        FontWeight="Bold"
+                                        Foreground="#2196F3"
+                                        Text="{Binding CurrentTimeEntry.TotalAmount, StringFormat=C, Mode=OneWay}" />
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+
+                        <!--  Error Message  -->
+                        <TextBlock
+                            Margin="0,15,0,0"
+                            FontWeight="SemiBold"
+                            Foreground="#F44336"
+                            Text="{Binding ErrorMessage}"
+                            TextWrapping="Wrap"
+                            Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                        <!--  Action Buttons  -->
+                        <StackPanel
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                            <Button
+                                Command="{Binding SaveTimeEntryCommand}"
+                                Content="✓ Gem"
+                                Style="{StaticResource SuccessButton}" />
+                            <Button
+                                Command="{Binding CancelCommand}"
+                                Content="✕ Annuller"
+                                Style="{StaticResource SecondaryButton}" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!--  Bottom Action Bar  -->
+        <Border
+            Grid.Row="3"
+            Margin="0,15,0,0"
+            Padding="15"
+            Background="#F5F5F5"
+            CornerRadius="4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button
+                        Command="{Binding EditTimeEntryCommand}"
+                        Content="✏️ Rediger"
+                        Style="{StaticResource ModernButton}" />
+                    <Button
+                        Command="{Binding MarkAsBilledCommand}"
+                        Content="✅ Marker som faktureret"
+                        Style="{StaticResource SuccessButton}" />
+                    <Button
+                        Command="{Binding ExportTimesheetCommand}"
+                        Content="📊 Eksporter"
+                        Style="{StaticResource SecondaryButton}" />
+                    <Button
+                        Command="{Binding DeleteTimeEntryCommand}"
+                        Content="🗑️ Slet"
+                        Style="{StaticResource DangerButton}" />
+                </StackPanel>
+
+                <TextBlock
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    Foreground="#616161"
+                    Text="{Binding StatusMessage}" />
+
+                <StackPanel
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,5,0"
+                        FontWeight="SemiBold"
+                        Text="Entries: " />
+                    <TextBlock
+                        FontWeight="Bold"
+                        Foreground="#2196F3"
+                        Text="{Binding TimeEntries.Count}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!--  Loading Overlay  -->
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Background="#99FFFFFF"
+            Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock
+                    FontSize="20"
+                    FontWeight="SemiBold"
+                    Foreground="#2196F3"
+                    Text="⏳ Indlæser..." />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

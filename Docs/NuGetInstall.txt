@@ -1,0 +1,7 @@
+﻿✅ System.Data.SqlClient (version 4.8.6) NOT WORKING -> Install-Package Microsoft.Data.SqlClient 
+✅ Microsoft.Extensions.Configuration (version 8.0.0)
+✅ Microsoft.Extensions.Configuration.Json (version 8.0.0)
+✅ Microsoft.Extensions.Configuration.FileExtensions (version 8.0.0)
+Microsoft.EntityFrameworkCore.SqlServer
+Microsoft.EntityFrameworkCore.Tools
+Microsoft.Extensions.DependencyInjection

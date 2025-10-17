@@ -1,0 +1,459 @@
+﻿<UserControl
+    x:Class="EconomicWPF.Views.DashboardView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="700"
+    d:DesignWidth="1200"
+    Background="White"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="20,10" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1976D2" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="StatCard" TargetType="Border">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#E0E0E0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="20" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect
+                        BlurRadius="10"
+                        Opacity="0.5"
+                        ShadowDepth="2"
+                        Color="#EEEEEE" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="HeaderText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#212121" />
+            <Setter Property="Margin" Value="0,0,0,30" />
+        </Style>
+
+        <Style x:Key="StatTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Foreground" Value="#757575" />
+            <Setter Property="Margin" Value="0,0,0,5" />
+        </Style>
+
+        <Style x:Key="StatValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="32" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+        </Style>
+
+        <Style x:Key="SectionHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#424242" />
+            <Setter Property="Margin" Value="10,20,10,10" />
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="SelectionMode" Value="Single" />
+            <Setter Property="AlternatingRowBackground" Value="#F5F5F5" />
+            <Setter Property="RowHeight" Value="35" />
+            <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="GridLinesVisibility" Value="None" />
+            <Setter Property="BorderBrush" Value="#E0E0E0" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#2196F3" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="BorderThickness" Value="0,0,1,0" />
+            <Setter Property="BorderBrush" Value="#1976D2" />
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--  Header  -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Style="{StaticResource HeaderText}" Text="Dashboard" />
+                    <TextBlock
+                        Margin="0,-20,0,0"
+                        FontSize="16"
+                        Foreground="#757575"
+                        Text="{Binding CurrentDate, StringFormat='dd. MMMM yyyy'}" />
+                </StackPanel>
+
+                <Button
+                    Grid.Column="1"
+                    VerticalAlignment="Top"
+                    Command="{Binding RefreshCommand}"
+                    Content="🔄 Opdater data"
+                    Style="{StaticResource ModernButton}" />
+            </Grid>
+
+            <!--  Key Statistics Cards  -->
+            <UniformGrid
+                Grid.Row="1"
+                Margin="0,20,0,0"
+                Columns="4">
+
+                <!--  Revenue Card  -->
+                <Border Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource StatTitle}" Text="📈 Omsætning (i år)" />
+                        <TextBlock
+                            Foreground="#4CAF50"
+                            Style="{StaticResource StatValue}"
+                            Text="{Binding TotalRevenue, StringFormat=C}" />
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            FontSize="12"
+                            Foreground="#757575"
+                            Text="{Binding RevenueChange}" />
+                    </StackPanel>
+                </Border>
+
+                <!--  Expenses Card  -->
+                <Border Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource StatTitle}" Text="💰 Udgifter (i år)" />
+                        <TextBlock
+                            Foreground="#F44336"
+                            Style="{StaticResource StatValue}"
+                            Text="{Binding TotalExpenses, StringFormat=C}" />
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            FontSize="12"
+                            Foreground="#757575"
+                            Text="{Binding ExpensesChange}" />
+                    </StackPanel>
+                </Border>
+
+                <!--  Profit Card  -->
+                <Border Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource StatTitle}" Text="💎 Resultat (i år)" />
+                        <TextBlock
+                            Foreground="#2196F3"
+                            Style="{StaticResource StatValue}"
+                            Text="{Binding NetProfit, StringFormat=C}" />
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            FontSize="12"
+                            Foreground="#757575"
+                            Text="{Binding ProfitChange}" />
+                    </StackPanel>
+                </Border>
+
+                <!--  Outstanding Card  -->
+                <Border Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource StatTitle}" Text="⏳ Udestående" />
+                        <TextBlock
+                            Foreground="#FF9800"
+                            Style="{StaticResource StatValue}"
+                            Text="{Binding OutstandingInvoices, StringFormat=C}" />
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            FontSize="12"
+                            Foreground="#757575"
+                            Text="{Binding OverdueInvoicesCount, StringFormat='{}{0} fakturaer'}" />
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <!--  Quick Stats Grid  -->
+            <Grid Grid.Row="2" Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!--  Customers  -->
+                <Border Grid.Column="0" Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Foreground="#424242"
+                            Text="👥 Kunder" />
+                        <TextBlock
+                            Margin="0,10,0,0"
+                            FontSize="36"
+                            FontWeight="Bold"
+                            Foreground="#2196F3"
+                            Text="{Binding TotalCustomers}" />
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="#757575"
+                            Text="{Binding ActiveCustomers, StringFormat='{}{0} aktive'}" />
+                    </StackPanel>
+                </Border>
+
+                <!--  Products  -->
+                <Border Grid.Column="1" Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Foreground="#424242"
+                            Text="📦 Produkter" />
+                        <TextBlock
+                            Margin="0,10,0,0"
+                            FontSize="36"
+                            FontWeight="Bold"
+                            Foreground="#4CAF50"
+                            Text="{Binding TotalProducts}" />
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="#F44336"
+                            Text="{Binding LowStockProducts, StringFormat='{}{0} lav lagerbeholdning'}" />
+                    </StackPanel>
+                </Border>
+
+                <!--  Projects  -->
+                <Border Grid.Column="2" Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Foreground="#424242"
+                            Text="📋 Projekter" />
+                        <TextBlock
+                            Margin="0,10,0,0"
+                            FontSize="36"
+                            FontWeight="Bold"
+                            Foreground="#FF9800"
+                            Text="{Binding ActiveProjects}" />
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="#757575"
+                            Text="{Binding TotalProjects, StringFormat='{}{0} i alt'}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!--  Recent Activity Section  -->
+            <Grid Grid.Row="3" Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!--  Recent Invoices  -->
+                <Border
+                    Grid.Column="0"
+                    Padding="0"
+                    Background="White"
+                    BorderBrush="#E0E0E0"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Border
+                            Grid.Row="0"
+                            Padding="15"
+                            Background="#F5F5F5"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="0,0,0,1"
+                            CornerRadius="8,8,0,0">
+                            <TextBlock
+                                FontSize="16"
+                                FontWeight="SemiBold"
+                                Text="📄 Seneste fakturaer" />
+                        </Border>
+
+                        <DataGrid
+                            Grid.Row="1"
+                            MaxHeight="300"
+                            BorderThickness="0"
+                            ItemsSource="{Binding RecentInvoices}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn
+                                    Width="80"
+                                    Binding="{Binding InvoiceNumber}"
+                                    Header="Nr." />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Customer.Name}"
+                                    Header="Kunde" />
+                                <DataGridTextColumn
+                                    Width="100"
+                                    Binding="{Binding TotalAmount, StringFormat=C}"
+                                    Header="Beløb">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                            <Setter Property="FontWeight" Value="SemiBold" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+                <!--  Overdue Invoices  -->
+                <Border
+                    Grid.Column="2"
+                    Padding="0"
+                    Background="White"
+                    BorderBrush="#E0E0E0"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Border
+                            Grid.Row="0"
+                            Padding="15"
+                            Background="#FFEBEE"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="0,0,0,1"
+                            CornerRadius="8,8,0,0">
+                            <TextBlock
+                                FontSize="16"
+                                FontWeight="SemiBold"
+                                Foreground="#D32F2F"
+                                Text="⚠️ Forfaldne fakturaer" />
+                        </Border>
+
+                        <DataGrid
+                            Grid.Row="1"
+                            MaxHeight="300"
+                            BorderThickness="0"
+                            ItemsSource="{Binding OverdueInvoices}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn
+                                    Width="80"
+                                    Binding="{Binding InvoiceNumber}"
+                                    Header="Nr." />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Customer.Name}"
+                                    Header="Kunde" />
+                                <DataGridTextColumn
+                                    Width="100"
+                                    Binding="{Binding TotalAmount, StringFormat=C}"
+                                    Header="Beløb">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                            <Setter Property="FontWeight" Value="SemiBold" />
+                                            <Setter Property="Foreground" Value="#F44336" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!--  Quick Actions  -->
+            <Border
+                Grid.Row="4"
+                Margin="0,20,0,0"
+                Padding="20"
+                Background="#F5F5F5"
+                CornerRadius="8">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,15"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Text="⚡ Hurtige handlinger" />
+                    <WrapPanel>
+                        <Button
+                            Command="{Binding CreateInvoiceCommand}"
+                            Content="➕ Ny faktura"
+                            Style="{StaticResource ModernButton}" />
+                        <Button
+                            Command="{Binding CreateCustomerCommand}"
+                            Content="👤 Ny kunde"
+                            Style="{StaticResource ModernButton}" />
+                        <Button
+                            Command="{Binding CreateProductCommand}"
+                            Content="📦 Nyt produkt"
+                            Style="{StaticResource ModernButton}" />
+                        <Button
+                            Command="{Binding RegisterPaymentCommand}"
+                            Content="💳 Registrer betaling"
+                            Style="{StaticResource ModernButton}" />
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+
+            <!--  Loading Overlay  -->
+            <Border
+                Grid.Row="0"
+                Grid.RowSpan="5"
+                Background="#99FFFFFF"
+                Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock
+                        FontSize="20"
+                        FontWeight="SemiBold"
+                        Foreground="#2196F3"
+                        Text="⏳ Indlæser dashboard..." />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

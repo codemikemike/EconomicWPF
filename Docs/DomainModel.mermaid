@@ -1,0 +1,191 @@
+﻿classDiagram
+    %% Core Business Entities
+    class Customer {
+        +int CustomerId
+        +string CustomerNumber
+        +string Name
+        +string CVR
+        +string Email
+        +string Phone
+        +string Address
+        +string City
+        +string ZipCode
+        +string Country
+        +decimal CreditLimit
+        +int PaymentTermDays
+        +bool IsActive
+        +DateTime CreatedDate
+    }
+
+    class Supplier {
+        +int SupplierId
+        +string SupplierNumber
+        +string Name
+        +string CVR
+        +string Email
+        +string Phone
+        +string Address
+        +string City
+        +string ZipCode
+        +string Country
+        +int PaymentTermDays
+        +bool IsActive
+        +DateTime CreatedDate
+    }
+
+    class Product {
+        +int ProductId
+        +string ProductNumber
+        +string Name
+        +string Description
+        +decimal PurchasePrice
+        +decimal SalesPrice
+        +decimal VATRate
+        +string Unit
+        +int StockQuantity
+        +int ReorderLevel
+        +bool IsActive
+        +int AccountId
+    }
+
+    class Invoice {
+        +int InvoiceId
+        +string InvoiceNumber
+        +int CustomerId
+        +DateTime InvoiceDate
+        +DateTime DueDate
+        +decimal SubTotal
+        +decimal VATAmount
+        +decimal TotalAmount
+        +string Currency
+        +string Status
+        +string Notes
+        +bool IsPaid
+        +DateTime? PaidDate
+        +DateTime CreatedDate
+    }
+
+    class InvoiceLine {
+        +int InvoiceLineId
+        +int InvoiceId
+        +int? ProductId
+        +string Description
+        +decimal Quantity
+        +decimal UnitPrice
+        +decimal VATRate
+        +decimal LineTotal
+        +int AccountId
+    }
+
+    class Account {
+        +int AccountId
+        +string AccountNumber
+        +string AccountName
+        +string AccountType
+        +int? ParentAccountId
+        +decimal Balance
+        +bool IsActive
+    }
+
+    class Transaction {
+        +int TransactionId
+        +DateTime TransactionDate
+        +int AccountId
+        +decimal DebitAmount
+        +decimal CreditAmount
+        +string Description
+        +string VoucherNumber
+        +int? InvoiceId
+        +int? ProjectId
+        +int? DimensionId
+        +bool IsPosted
+        +DateTime CreatedDate
+    }
+
+    class Project {
+        +int ProjectId
+        +string ProjectNumber
+        +string Name
+        +string Description
+        +int? CustomerId
+        +DateTime StartDate
+        +DateTime? EndDate
+        +decimal BudgetAmount
+        +string Status
+        +bool IsActive
+    }
+
+    class TimeEntry {
+        +int TimeEntryId
+        +int ProjectId
+        +int EmployeeId
+        +DateTime Date
+        +decimal Hours
+        +string Description
+        +decimal HourlyRate
+        +bool IsBillable
+        +bool IsInvoiced
+    }
+
+    class Dimension {
+        +int DimensionId
+        +string DimensionName
+        +string DimensionValue
+        +int? ParentDimensionId
+        +bool IsActive
+    }
+
+    class Budget {
+        +int BudgetId
+        +string BudgetName
+        +int AccountId
+        +int Year
+        +int Month
+        +decimal Amount
+        +string Notes
+    }
+
+    class VATCode {
+        +int VATCodeId
+        +string Code
+        +string Description
+        +decimal Rate
+        +bool IsActive
+    }
+
+    class Payment {
+        +int PaymentId
+        +int InvoiceId
+        +DateTime PaymentDate
+        +decimal Amount
+        +string PaymentMethod
+        +string Reference
+        +DateTime CreatedDate
+    }
+
+    class BankTransaction {
+        +int BankTransactionId
+        +DateTime TransactionDate
+        +string Description
+        +decimal Amount
+        +string Reference
+        +bool IsReconciled
+        +int? TransactionId
+    }
+
+    %% Relationships
+    Customer "1" -- "*" Invoice : places
+    Invoice "1" -- "*" InvoiceLine : contains
+    Product "0..1" -- "*" InvoiceLine : references
+    Account "1" -- "*" Transaction : records
+    Account "1" -- "*" InvoiceLine : categorizes
+    Invoice "1" -- "*" Payment : receives
+    Project "1" -- "*" TimeEntry : tracks
+    Customer "0..1" -- "*" Project : owns
+    Transaction "*" -- "0..1" Invoice : links
+    Transaction "*" -- "0..1" Project : allocates
+    Transaction "*" -- "0..1" Dimension : categorizes
+    Account "1" -- "*" Budget : plans
+    Account "0..1" -- "*" Account : parent-child
+    Dimension "0..1" -- "*" Dimension : parent-child
+    BankTransaction "0..1" -- "0..1" Transaction : matches

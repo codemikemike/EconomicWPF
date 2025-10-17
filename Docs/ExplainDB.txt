@@ -1,0 +1,20 @@
+﻿Dine 14 tabeller er:
+Core Business:
+
+✅ Customers
+✅ Suppliers
+✅ Products
+✅ Accounts
+
+Transactions:
+5. ✅ Invoices
+6. ✅ InvoiceLines
+7. ✅ Payments
+8. ✅ Transactions
+9. ✅ BankTransactions
+Advanced:
+10. ✅ Projects
+11. ✅ Dimensions
+12. ✅ Budgets
+13. ✅ TimeEntries
+14. ✅ VATCodes

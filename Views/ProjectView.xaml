@@ -1,0 +1,569 @@
+﻿<UserControl
+    x:Class="EconomicWPF.Views.ProjectView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="700"
+    d:DesignWidth="1200"
+    Background="White"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!--  Moderne Style Definitions  -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="20,10" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1976D2" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#BDBDBD" />
+                                <Setter Property="Foreground" Value="#757575" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style
+            x:Key="SecondaryButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#757575" />
+        </Style>
+
+        <Style
+            x:Key="DangerButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#F44336" />
+        </Style>
+
+        <Style
+            x:Key="SuccessButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50" />
+        </Style>
+
+        <Style
+            x:Key="WarningButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#FF9800" />
+        </Style>
+
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="BorderBrush" Value="#BDBDBD" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="BorderBrush" Value="#BDBDBD" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+
+        <Style x:Key="ModernDatePicker" TargetType="DatePicker">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="BorderBrush" Value="#BDBDBD" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+
+        <Style x:Key="HeaderText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#212121" />
+            <Setter Property="Margin" Value="0,0,0,20" />
+        </Style>
+
+        <Style x:Key="LabelText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#424242" />
+            <Setter Property="Margin" Value="0,5,0,3" />
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="SelectionMode" Value="Single" />
+            <Setter Property="AlternatingRowBackground" Value="#F5F5F5" />
+            <Setter Property="RowHeight" Value="35" />
+            <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="GridLinesVisibility" Value="None" />
+            <Setter Property="BorderBrush" Value="#E0E0E0" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#2196F3" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="BorderThickness" Value="0,0,1,0" />
+            <Setter Property="BorderBrush" Value="#1976D2" />
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Cursor" Value="Hand" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#BBDEFB" />
+                    <Setter Property="Foreground" Value="#212121" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E3F2FD" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Column="0"
+                Style="{StaticResource HeaderText}"
+                Text="Projekter" />
+
+            <Border
+                Grid.Column="1"
+                Padding="15,8"
+                Background="#E3F2FD"
+                CornerRadius="4">
+                <StackPanel>
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="#616161"
+                        Text="Total Budget" />
+                    <TextBlock
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Foreground="#2196F3"
+                        Text="{Binding TotalBudget, StringFormat=C}" />
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!--  Search and Filter Bar  -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox
+                Grid.Column="0"
+                Padding="10"
+                FontSize="14"
+                Style="{StaticResource ModernTextBox}"
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="4" />
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+            <TextBlock
+                Grid.Column="0"
+                Padding="15,10"
+                VerticalAlignment="Center"
+                FontSize="14"
+                Foreground="#9E9E9E"
+                IsHitTestVisible="False"
+                Text="🔍 Søg efter projekt...">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SearchText}" Value="">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SearchText}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <ComboBox
+                Grid.Column="1"
+                Width="150"
+                Margin="10,5"
+                ItemsSource="{Binding StatusFilters}"
+                SelectedItem="{Binding StatusFilter}"
+                Style="{StaticResource ModernComboBox}" />
+
+            <Button
+                Grid.Column="2"
+                Command="{Binding NewProjectCommand}"
+                Content="➕ Nyt Projekt"
+                Style="{StaticResource SuccessButton}" />
+        </Grid>
+
+        <!--  Main Content Area  -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--  Projects List  -->
+            <Border
+                Grid.Column="0"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="4">
+                <DataGrid ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject, Mode=TwoWay}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="100"
+                            Binding="{Binding ProjectNumber}"
+                            Header="Projektnr." />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Name}"
+                            Header="Navn" />
+                        <DataGridTextColumn
+                            Width="150"
+                            Binding="{Binding Customer.Name}"
+                            Header="Kunde" />
+                        <DataGridTextColumn
+                            Width="100"
+                            Binding="{Binding StartDate, StringFormat=dd-MM-yyyy}"
+                            Header="Start" />
+                        <DataGridTextColumn
+                            Width="100"
+                            Binding="{Binding EndDate, StringFormat=dd-MM-yyyy}"
+                            Header="Slut" />
+                        <DataGridTextColumn
+                            Width="110"
+                            Binding="{Binding BudgetAmount, StringFormat=C}"
+                            Header="Budget">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Right" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="100"
+                            Binding="{Binding Status}"
+                            Header="Status">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                            <Setter Property="Foreground" Value="#4CAF50" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status}" Value="Active">
+                                            <Setter Property="Foreground" Value="#2196F3" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status}" Value="OnHold">
+                                            <Setter Property="Foreground" Value="#FF9800" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!--  Edit Panel  -->
+            <Border
+                Grid.Column="2"
+                Padding="20"
+                Background="#FAFAFA"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="4"
+                Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock
+                            Margin="0,0,0,20"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="Projekt Detaljer" />
+
+                        <!--  Basis Information  -->
+                        <TextBlock
+                            Margin="0,0,0,10"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#757575"
+                            Text="BASISOPLYSNINGER" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Projektnummer *" />
+                        <TextBox
+                            Background="#F5F5F5"
+                            IsReadOnly="True"
+                            Style="{StaticResource ModernTextBox}"
+                            Text="{Binding CurrentProject.ProjectNumber, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Projektnavn *" />
+                        <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding CurrentProject.Name, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Beskrivelse" />
+                        <TextBox
+                            Height="80"
+                            AcceptsReturn="True"
+                            Style="{StaticResource ModernTextBox}"
+                            Text="{Binding CurrentProject.Description, UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="Wrap"
+                            VerticalScrollBarVisibility="Auto" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Kunde" />
+                        <ComboBox
+                            DisplayMemberPath="Name"
+                            ItemsSource="{Binding Customers}"
+                            SelectedItem="{Binding SelectedCustomer}"
+                            Style="{StaticResource ModernComboBox}" />
+
+                        <!--  Tidsplan  -->
+                        <TextBlock
+                            Margin="0,15,0,10"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#757575"
+                            Text="TIDSPLAN" />
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Style="{StaticResource LabelText}" Text="Startdato *" />
+                                <DatePicker SelectedDate="{Binding CurrentProject.StartDate}" Style="{StaticResource ModernDatePicker}" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Style="{StaticResource LabelText}" Text="Slutdato" />
+                                <DatePicker SelectedDate="{Binding CurrentProject.EndDate}" Style="{StaticResource ModernDatePicker}" />
+                            </StackPanel>
+                        </Grid>
+
+                        <!--  Budget og Status  -->
+                        <TextBlock
+                            Margin="0,15,0,10"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#757575"
+                            Text="BUDGET OG STATUS" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Budget" />
+                        <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding CurrentProject.BudgetAmount, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Status" />
+                        <ComboBox
+                            ItemsSource="{Binding ProjectStatuses}"
+                            SelectedItem="{Binding CurrentProject.Status}"
+                            Style="{StaticResource ModernComboBox}" />
+
+                        <CheckBox
+                            Margin="0,15,0,0"
+                            Content="Aktivt projekt"
+                            FontSize="14"
+                            IsChecked="{Binding CurrentProject.IsActive}" />
+
+                        <!--  Project Stats (if selected)  -->
+                        <Border
+                            Margin="0,15,0,0"
+                            Padding="15"
+                            Background="#E8F5E9"
+                            CornerRadius="4"
+                            Visibility="{Binding IsProjectSelected, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <StackPanel>
+                                <TextBlock
+                                    Margin="0,0,0,10"
+                                    FontSize="12"
+                                    FontWeight="Bold"
+                                    Foreground="#2E7D32"
+                                    Text="PROJEKTOVERBLIK" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        FontSize="12"
+                                        Text="Timer registreret:" />
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        Text="{Binding TotalHours, StringFormat='{}{0:N2} timer'}" />
+
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Margin="0,5,0,0"
+                                        FontSize="12"
+                                        Text="Omsætning:" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="0,5,0,0"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        Text="{Binding TotalRevenue, StringFormat=C}" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!--  Error Message  -->
+                        <TextBlock
+                            Margin="0,15,0,0"
+                            FontWeight="SemiBold"
+                            Foreground="#F44336"
+                            Text="{Binding ErrorMessage}"
+                            TextWrapping="Wrap"
+                            Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                        <!--  Action Buttons  -->
+                        <StackPanel
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                            <Button
+                                Command="{Binding SaveProjectCommand}"
+                                Content="✓ Gem"
+                                Style="{StaticResource SuccessButton}" />
+                            <Button
+                                Command="{Binding CancelCommand}"
+                                Content="✕ Annuller"
+                                Style="{StaticResource SecondaryButton}" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!--  Bottom Action Bar  -->
+        <Border
+            Grid.Row="3"
+            Margin="0,15,0,0"
+            Padding="15"
+            Background="#F5F5F5"
+            CornerRadius="4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button
+                        Command="{Binding EditProjectCommand}"
+                        Content="✏️ Rediger"
+                        Style="{StaticResource ModernButton}" />
+                    <Button
+                        Command="{Binding CompleteProjectCommand}"
+                        Content="✅ Afslut projekt"
+                        Style="{StaticResource SuccessButton}" />
+                    <Button
+                        Command="{Binding ArchiveProjectCommand}"
+                        Content="📁 Arkiver"
+                        Style="{StaticResource WarningButton}" />
+                    <Button
+                        Command="{Binding DeleteProjectCommand}"
+                        Content="🗑️ Slet"
+                        Style="{StaticResource DangerButton}" />
+                </StackPanel>
+
+                <TextBlock
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    Foreground="#616161"
+                    Text="{Binding StatusMessage}" />
+
+                <StackPanel
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,5,0"
+                        FontWeight="SemiBold"
+                        Text="Total projekter: " />
+                    <TextBlock
+                        FontWeight="Bold"
+                        Foreground="#2196F3"
+                        Text="{Binding Projects.Count}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!--  Loading Overlay  -->
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Background="#99FFFFFF"
+            Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock
+                    FontSize="20"
+                    FontWeight="SemiBold"
+                    Foreground="#2196F3"
+                    Text="⏳ Indlæser..." />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

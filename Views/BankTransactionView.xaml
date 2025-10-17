@@ -1,0 +1,577 @@
+﻿<UserControl
+    x:Class="EconomicWPF.Views.BankTransactionView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="700"
+    d:DesignWidth="1200"
+    Background="White"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!--  Moderne Style Definitions  -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="20,10" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1976D2" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#BDBDBD" />
+                                <Setter Property="Foreground" Value="#757575" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style
+            x:Key="SecondaryButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#757575" />
+        </Style>
+
+        <Style
+            x:Key="DangerButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#F44336" />
+        </Style>
+
+        <Style
+            x:Key="SuccessButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50" />
+        </Style>
+
+        <Style
+            x:Key="WarningButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#FF9800" />
+        </Style>
+
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="BorderBrush" Value="#BDBDBD" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+
+        <Style x:Key="ModernDatePicker" TargetType="DatePicker">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="BorderBrush" Value="#BDBDBD" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+
+        <Style x:Key="HeaderText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#212121" />
+            <Setter Property="Margin" Value="0,0,0,20" />
+        </Style>
+
+        <Style x:Key="LabelText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#424242" />
+            <Setter Property="Margin" Value="0,5,0,3" />
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="SelectionMode" Value="Single" />
+            <Setter Property="AlternatingRowBackground" Value="#F5F5F5" />
+            <Setter Property="RowHeight" Value="35" />
+            <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="GridLinesVisibility" Value="None" />
+            <Setter Property="BorderBrush" Value="#E0E0E0" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#2196F3" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="BorderThickness" Value="0,0,1,0" />
+            <Setter Property="BorderBrush" Value="#1976D2" />
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Cursor" Value="Hand" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#BBDEFB" />
+                    <Setter Property="Foreground" Value="#212121" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E3F2FD" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Column="0"
+                Style="{StaticResource HeaderText}"
+                Text="Banktransaktioner" />
+
+            <StackPanel
+                Grid.Column="1"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <Border
+                    Margin="5"
+                    Padding="15,8"
+                    Background="#FFEBEE"
+                    CornerRadius="4">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="11"
+                            Foreground="#616161"
+                            Text="Uafstemte" />
+                        <TextBlock
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Foreground="#F44336"
+                            Text="{Binding UnreconciledCount}" />
+                    </StackPanel>
+                </Border>
+                <Border
+                    Margin="5"
+                    Padding="15,8"
+                    Background="#E8F5E9"
+                    CornerRadius="4">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="11"
+                            Foreground="#616161"
+                            Text="Afstemte" />
+                        <TextBlock
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Foreground="#4CAF50"
+                            Text="{Binding ReconciledCount}" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+
+        <!--  Filter Bar  -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <DatePicker
+                Grid.Column="0"
+                Width="130"
+                SelectedDate="{Binding DateFrom}"
+                Style="{StaticResource ModernDatePicker}" />
+
+            <TextBlock
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="16"
+                Foreground="#757575"
+                Text="→" />
+
+            <DatePicker
+                Grid.Column="2"
+                Width="130"
+                SelectedDate="{Binding DateTo}"
+                Style="{StaticResource ModernDatePicker}" />
+
+            <CheckBox
+                Grid.Column="4"
+                Margin="15,0"
+                VerticalAlignment="Center"
+                Content="Vis kun uafstemte"
+                FontSize="14"
+                IsChecked="{Binding ShowUnreconciledOnly}" />
+
+            <Button
+                Grid.Column="5"
+                Command="{Binding ImportTransactionsCommand}"
+                Content="➕ Importer transaktioner"
+                Style="{StaticResource SuccessButton}" />
+        </Grid>
+
+        <!--  Main Content Area  -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--  Bank Transactions List  -->
+            <Border
+                Grid.Column="0"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="4">
+                <DataGrid ItemsSource="{Binding BankTransactions}" SelectedItem="{Binding SelectedBankTransaction, Mode=TwoWay}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="100"
+                            Binding="{Binding TransactionDate, StringFormat=dd-MM-yyyy}"
+                            Header="Dato" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Description}"
+                            Header="Beskrivelse" />
+                        <DataGridTextColumn
+                            Width="150"
+                            Binding="{Binding Reference}"
+                            Header="Reference" />
+                        <DataGridTextColumn
+                            Width="120"
+                            Binding="{Binding Amount, StringFormat=C}"
+                            Header="Beløb">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Right" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Amount, Converter={StaticResource PositiveNegativeConverter}}" Value="Positive">
+                                            <Setter Property="Foreground" Value="#4CAF50" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Amount, Converter={StaticResource PositiveNegativeConverter}}" Value="Negative">
+                                            <Setter Property="Foreground" Value="#F44336" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridCheckBoxColumn
+                            Width="80"
+                            Binding="{Binding IsReconciled}"
+                            Header="Afstemt">
+                            <DataGridCheckBoxColumn.ElementStyle>
+                                <Style TargetType="CheckBox">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Foreground" Value="#4CAF50" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridCheckBoxColumn.ElementStyle>
+                        </DataGridCheckBoxColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!--  Reconciliation Panel  -->
+            <Border
+                Grid.Column="2"
+                Padding="20"
+                Background="#FAFAFA"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="4"
+                Visibility="{Binding IsBankTransactionSelected, Converter={StaticResource BoolToVisibilityConverter}}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock
+                            Margin="0,0,0,20"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="Afstemning" />
+
+                        <!--  Transaction Details  -->
+                        <TextBlock
+                            Margin="0,0,0,10"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#757575"
+                            Text="TRANSAKTIONSOPLYSNINGER" />
+
+                        <Border
+                            Margin="0,0,0,15"
+                            Padding="15"
+                            Background="#F5F5F5"
+                            CornerRadius="4">
+                            <StackPanel>
+                                <Grid Margin="0,5">
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="#616161"
+                                        Text="Dato:" />
+                                    <TextBlock
+                                        HorizontalAlignment="Right"
+                                        FontWeight="SemiBold"
+                                        Text="{Binding SelectedBankTransaction.TransactionDate, StringFormat=dd-MM-yyyy}" />
+                                </Grid>
+                                <Grid Margin="0,5">
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="#616161"
+                                        Text="Beløb:" />
+                                    <TextBlock
+                                        HorizontalAlignment="Right"
+                                        FontSize="16"
+                                        FontWeight="Bold"
+                                        Foreground="#2196F3"
+                                        Text="{Binding SelectedBankTransaction.Amount, StringFormat=C}" />
+                                </Grid>
+                                <Separator Margin="0,10" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="#616161"
+                                    Text="{Binding SelectedBankTransaction.Description}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+
+                        <!--  Reconciliation Status  -->
+                        <Border
+                            Margin="0,0,0,15"
+                            Padding="15"
+                            CornerRadius="4">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="#E8F5E9" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedBankTransaction.IsReconciled}" Value="False">
+                                            <Setter Property="Background" Value="#FFEBEE" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <StackPanel>
+                                <TextBlock FontSize="14" FontWeight="SemiBold">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="✓ Afstemt" />
+                                            <Setter Property="Foreground" Value="#2E7D32" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SelectedBankTransaction.IsReconciled}" Value="False">
+                                                    <Setter Property="Text" Value="⚠ Ikke afstemt" />
+                                                    <Setter Property="Foreground" Value="#C62828" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+
+                        <!--  Match with Transaction  -->
+                        <TextBlock
+                            Margin="0,0,0,10"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#757575"
+                            Text="MATCH MED BOGFØRING"
+                            Visibility="{Binding SelectedBankTransaction.IsReconciled, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+
+                        <Border
+                            Margin="0,0,0,15"
+                            Padding="15"
+                            Background="#FFF3E0"
+                            CornerRadius="4"
+                            Visibility="{Binding SelectedBankTransaction.IsReconciled, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                            <StackPanel>
+                                <TextBlock
+                                    Margin="0,0,0,10"
+                                    FontSize="12"
+                                    Foreground="#E65100"
+                                    Text="Vælg en bogføringspost der matcher denne banktransaktion"
+                                    TextWrapping="Wrap" />
+                                <Button
+                                    HorizontalAlignment="Stretch"
+                                    Command="{Binding FindMatchingTransactionsCommand}"
+                                    Content="🔍 Find matchende posteringer"
+                                    Style="{StaticResource ModernButton}" />
+                            </StackPanel>
+                        </Border>
+
+                        <!--  Suggested Matches  -->
+                        <Border
+                            Margin="0,0,0,15"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            Visibility="{Binding HasSuggestedMatches, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <StackPanel>
+                                <Border
+                                    Padding="10"
+                                    Background="#F5F5F5"
+                                    CornerRadius="4,4,0,0">
+                                    <TextBlock
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        Text="Foreslåede matches" />
+                                </Border>
+                                <ItemsControl Margin="10" ItemsSource="{Binding SuggestedMatches}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border
+                                                Padding="5"
+                                                BorderBrush="#E0E0E0"
+                                                BorderThickness="0,0,0,1"
+                                                Cursor="Hand">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock
+                                                            FontSize="12"
+                                                            FontWeight="SemiBold"
+                                                            Text="{Binding Description}" />
+                                                        <TextBlock
+                                                            FontSize="10"
+                                                            Foreground="#757575"
+                                                            Text="{Binding TransactionDate, StringFormat=dd-MM-yyyy}" />
+                                                    </StackPanel>
+                                                    <TextBlock
+                                                        Grid.Column="1"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="Bold"
+                                                        Text="{Binding Amount, StringFormat=C}" />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+
+                        <!--  Action Buttons  -->
+                        <StackPanel Margin="0,10,0,0">
+                            <Button
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding ReconcileCommand}"
+                                Content="✓ Marker som afstemt"
+                                Style="{StaticResource SuccessButton}"
+                                Visibility="{Binding SelectedBankTransaction.IsReconciled, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                            <Button
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding UnreconcileCommand}"
+                                Content="↩ Annuller afstemning"
+                                Style="{StaticResource WarningButton}"
+                                Visibility="{Binding SelectedBankTransaction.IsReconciled, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!--  Bottom Action Bar  -->
+        <Border
+            Grid.Row="3"
+            Margin="0,15,0,0"
+            Padding="15"
+            Background="#F5F5F5"
+            CornerRadius="4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button
+                        Command="{Binding RefreshCommand}"
+                        Content="🔄 Opdater"
+                        Style="{StaticResource ModernButton}" />
+                    <Button
+                        Command="{Binding ExportCommand}"
+                        Content="📊 Eksporter"
+                        Style="{StaticResource SecondaryButton}" />
+                    <Button
+                        Command="{Binding DeleteCommand}"
+                        Content="🗑️ Slet valgte"
+                        Style="{StaticResource DangerButton}" />
+                </StackPanel>
+
+                <TextBlock
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    Foreground="#616161"
+                    Text="{Binding StatusMessage}" />
+
+                <StackPanel
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,5,0"
+                        FontWeight="SemiBold"
+                        Text="Total transaktioner: " />
+                    <TextBlock
+                        FontWeight="Bold"
+                        Foreground="#2196F3"
+                        Text="{Binding BankTransactions.Count}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!--  Loading Overlay  -->
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Background="#99FFFFFF"
+            Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock
+                    FontSize="20"
+                    FontWeight="SemiBold"
+                    Foreground="#2196F3"
+                    Text="⏳ Indlæser..." />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,432 @@
+﻿<UserControl
+    x:Class="EconomicWPF.Views.CustomerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="700"
+    d:DesignWidth="1200"
+    Background="White"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!--  Moderne Style Definitions (samme som AccountView)  -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="20,10" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1976D2" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#BDBDBD" />
+                                <Setter Property="Foreground" Value="#757575" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style
+            x:Key="SecondaryButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#757575" />
+        </Style>
+
+        <Style
+            x:Key="DangerButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#F44336" />
+        </Style>
+
+        <Style
+            x:Key="SuccessButton"
+            BasedOn="{StaticResource ModernButton}"
+            TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50" />
+        </Style>
+
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="BorderBrush" Value="#BDBDBD" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+
+        <Style x:Key="HeaderText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#212121" />
+            <Setter Property="Margin" Value="0,0,0,20" />
+        </Style>
+
+        <Style x:Key="LabelText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#424242" />
+            <Setter Property="Margin" Value="0,5,0,3" />
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="SelectionMode" Value="Single" />
+            <Setter Property="AlternatingRowBackground" Value="#F5F5F5" />
+            <Setter Property="RowHeight" Value="35" />
+            <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="GridLinesVisibility" Value="None" />
+            <Setter Property="BorderBrush" Value="#E0E0E0" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#2196F3" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="BorderThickness" Value="0,0,1,0" />
+            <Setter Property="BorderBrush" Value="#1976D2" />
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Cursor" Value="Hand" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#BBDEFB" />
+                    <Setter Property="Foreground" Value="#212121" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E3F2FD" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <TextBlock
+            Grid.Row="0"
+            Style="{StaticResource HeaderText}"
+            Text="Kunder" />
+
+        <!--  Search and Filter Bar  -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox
+                Grid.Column="0"
+                Padding="10"
+                FontSize="14"
+                Style="{StaticResource ModernTextBox}"
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="4" />
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+            <TextBlock
+                Grid.Column="0"
+                Padding="15,10"
+                VerticalAlignment="Center"
+                FontSize="14"
+                Foreground="#9E9E9E"
+                IsHitTestVisible="False"
+                Text="🔍 Søg efter kunde...">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SearchText}" Value="">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SearchText}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <CheckBox
+                Grid.Column="1"
+                Margin="15,0"
+                VerticalAlignment="Center"
+                Content="Vis kun aktive"
+                FontSize="14"
+                IsChecked="{Binding ShowActiveOnly}" />
+
+            <Button
+                Grid.Column="2"
+                Command="{Binding NewCustomerCommand}"
+                Content="➕ Ny Kunde"
+                Style="{StaticResource SuccessButton}" />
+        </Grid>
+
+        <!--  Main Content Area  -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--  Customers List  -->
+            <Border
+                Grid.Column="0"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="4">
+                <DataGrid ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="100"
+                            Binding="{Binding CustomerNumber}"
+                            Header="Kundenr." />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Name}"
+                            Header="Navn" />
+                        <DataGridTextColumn
+                            Width="200"
+                            Binding="{Binding Email}"
+                            Header="Email" />
+                        <DataGridTextColumn
+                            Width="120"
+                            Binding="{Binding Phone}"
+                            Header="Telefon" />
+                        <DataGridTextColumn
+                            Width="120"
+                            Binding="{Binding City}"
+                            Header="By" />
+                        <DataGridCheckBoxColumn
+                            Width="80"
+                            Binding="{Binding IsActive}"
+                            Header="Aktiv" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!--  Edit Panel  -->
+            <Border
+                Grid.Column="2"
+                Padding="20"
+                Background="#FAFAFA"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1"
+                CornerRadius="4"
+                Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock
+                            Margin="0,0,0,20"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="Kunde Detaljer" />
+
+                        <!--  Basis Information  -->
+                        <TextBlock
+                            Margin="0,0,0,10"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#757575"
+                            Text="BASISOPLYSNINGER" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Kundenummer *" />
+                        <TextBox
+                            Background="#F5F5F5"
+                            IsReadOnly="True"
+                            Style="{StaticResource ModernTextBox}"
+                            Text="{Binding CurrentCustomer.CustomerNumber, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Navn *" />
+                        <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding CurrentCustomer.Name, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="CVR-nummer" />
+                        <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding CurrentCustomer.CVR, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <!--  Kontakt Information  -->
+                        <TextBlock
+                            Margin="0,15,0,10"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#757575"
+                            Text="KONTAKTOPLYSNINGER" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Email" />
+                        <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding CurrentCustomer.Email, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Telefon" />
+                        <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding CurrentCustomer.Phone, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <!--  Adresse Information  -->
+                        <TextBlock
+                            Margin="0,15,0,10"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#757575"
+                            Text="ADRESSEOPLYSNINGER" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Adresse" />
+                        <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding CurrentCustomer.Address, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Style="{StaticResource LabelText}" Text="Postnr." />
+                                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding CurrentCustomer.ZipCode, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Style="{StaticResource LabelText}" Text="By" />
+                                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding CurrentCustomer.City, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Land" />
+                        <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding CurrentCustomer.Country, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <!--  Betalingsbetingelser  -->
+                        <TextBlock
+                            Margin="0,15,0,10"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Foreground="#757575"
+                            Text="BETALINGSBETINGELSER" />
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Betalingsfrist (dage)" />
+                        <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding CurrentCustomer.PaymentTermDays, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <CheckBox
+                            Margin="0,15,0,0"
+                            Content="Aktiv kunde"
+                            FontSize="14"
+                            IsChecked="{Binding CurrentCustomer.IsActive}" />
+
+                        <!--  Error Message  -->
+                        <TextBlock
+                            Margin="0,15,0,0"
+                            FontWeight="SemiBold"
+                            Foreground="#F44336"
+                            Text="{Binding ErrorMessage}"
+                            TextWrapping="Wrap"
+                            Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                        <!--  Action Buttons  -->
+                        <StackPanel
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                            <Button
+                                Command="{Binding SaveCustomerCommand}"
+                                Content="✓ Gem"
+                                Style="{StaticResource SuccessButton}" />
+                            <Button
+                                Command="{Binding CancelCommand}"
+                                Content="✕ Annuller"
+                                Style="{StaticResource SecondaryButton}" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!--  Bottom Action Bar  -->
+        <Border
+            Grid.Row="3"
+            Margin="0,15,0,0"
+            Padding="15"
+            Background="#F5F5F5"
+            CornerRadius="4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button
+                        Command="{Binding EditCustomerCommand}"
+                        Content="✏️ Rediger"
+                        Style="{StaticResource ModernButton}" />
+                    <Button
+                        Command="{Binding DeleteCustomerCommand}"
+                        Content="🗑️ Slet"
+                        Style="{StaticResource DangerButton}" />
+                </StackPanel>
+
+                <TextBlock
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    Foreground="#616161"
+                    Text="{Binding StatusMessage}" />
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,5,0"
+                        VerticalAlignment="Center"
+                        FontWeight="SemiBold"
+                        Text="Total kunder: " />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Foreground="#2196F3"
+                        Text="{Binding Customers.Count}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!--  Loading Overlay  -->
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Background="#99FFFFFF"
+            Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock
+                    FontSize="20"
+                    FontWeight="SemiBold"
+                    Foreground="#2196F3"
+                    Text="⏳ Indlæser..." />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
